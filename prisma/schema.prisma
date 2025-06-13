@@ -1,0 +1,260 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Multi-tenant model for Masjid/Surau
+model Masjid {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  type        String   // "masjid" or "surau"
+  address     String?
+  phone       String?
+  email       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  users       User[]
+  assets      Asset[]
+  forms       FormSubmission[]
+  maintenances Maintenance[]
+  disposals   DisposalRequest[]
+  losses      LossReport[]
+  auditLogs   AuditLog[]
+}
+
+// User model with role-based access
+model User {
+  id          String   @id @default(cuid())
+  name        String
+  email       String   @unique
+  password    String
+  role        String   // "Admin", "Pegawai Aset", "Pegawai Pengawal", "Jawatankuasa"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  masjid      Masjid   @relation(fields: [masjidId], references: [id])
+  masjidId    String
+  
+  // Created/Updated by relations
+  assetsCreated       Asset[]            @relation("AssetCreatedBy")
+  assetsUpdated       Asset[]            @relation("AssetUpdatedBy")
+  formsCreated        FormSubmission[]   @relation("FormCreatedBy")
+  formsUpdated        FormSubmission[]   @relation("FormUpdatedBy")
+  maintenancesCreated Maintenance[]      @relation("MaintenanceCreatedBy")
+  maintenancesUpdated Maintenance[]      @relation("MaintenanceUpdatedBy")
+  disposalsCreated    DisposalRequest[]  @relation("DisposalCreatedBy")
+  disposalsUpdated    DisposalRequest[]  @relation("DisposalUpdatedBy")
+  lossesCreated       LossReport[]       @relation("LossCreatedBy")
+  lossesUpdated       LossReport[]       @relation("LossUpdatedBy")
+  auditLogs           AuditLog[]
+}
+
+// Asset model
+model Asset {
+  id                String   @id @default(cuid())
+  assetId           String   @unique // Custom asset ID (e.g., A001)
+  name              String
+  description       String?
+  type              String   // "Aset Alih" or "Aset Tak Alih"
+  category          String
+  acquisitionDate   DateTime
+  acquisitionMethod String   // "Pembelian", "Wakaf", "Sumbangan", etc.
+  value             Float
+  location          String
+  serialNumber      String?
+  status            String   // "Aktif", "Penyelenggaraan", "Pelupusan", "Hilang"
+  qrCode            String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  masjid            Masjid   @relation(fields: [masjidId], references: [id])
+  masjidId          String
+  createdBy         User     @relation("AssetCreatedBy", fields: [createdById], references: [id])
+  createdById       String
+  updatedBy         User     @relation("AssetUpdatedBy", fields: [updatedById], references: [id])
+  updatedById       String
+  
+  // Asset lifecycle relations
+  assetMovements    AssetMovement[]
+  maintenances      Maintenance[]
+  disposalRequests  DisposalRequest[]
+  lossReports       LossReport[]
+  documents         AssetDocument[]
+}
+
+// Asset Document model for storing file references
+model AssetDocument {
+  id          String   @id @default(cuid())
+  type        String   // "invoice", "delivery_order", "wakaf_letter", "image", etc.
+  fileName    String
+  fileUrl     String
+  fileSize    Int
+  mimeType    String
+  createdAt   DateTime @default(now())
+
+  // Relations
+  asset       Asset    @relation(fields: [assetId], references: [id])
+  assetId     String
+}
+
+// Asset Movement (usage, transfer, borrowing)
+model AssetMovement {
+  id          String   @id @default(cuid())
+  type        String   // "usage", "transfer", "borrowing"
+  fromLocation String
+  toLocation  String
+  movementDate DateTime
+  returnDate  DateTime?
+  status      String   // "ongoing", "returned", "completed"
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  asset       Asset    @relation(fields: [assetId], references: [id])
+  assetId     String
+}
+
+// Maintenance model
+model Maintenance {
+  id              String   @id @default(cuid())
+  maintenanceType String   // "routine", "repair", "emergency"
+  description     String
+  scheduledDate   DateTime
+  completedDate   DateTime?
+  cost            Float?
+  vendor          String?
+  status          String   // "scheduled", "in_progress", "completed", "cancelled"
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  asset           Asset    @relation(fields: [assetId], references: [id])
+  assetId         String
+  masjid          Masjid   @relation(fields: [masjidId], references: [id])
+  masjidId        String
+  createdBy       User     @relation("MaintenanceCreatedBy", fields: [createdById], references: [id])
+  createdById     String
+  updatedBy       User     @relation("MaintenanceUpdatedBy", fields: [updatedById], references: [id])
+  updatedById     String
+}
+
+// Disposal Request model
+model DisposalRequest {
+  id              String   @id @default(cuid())
+  requestDate     DateTime @default(now())
+  reason          String
+  disposalMethod  String   // "sale", "donation", "destruction", "recycling"
+  approvalStatus  String   // "pending", "approved", "rejected"
+  approvedDate    DateTime?
+  disposalDate    DateTime?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  asset           Asset    @relation(fields: [assetId], references: [id])
+  assetId         String
+  masjid          Masjid   @relation(fields: [masjidId], references: [id])
+  masjidId        String
+  createdBy       User     @relation("DisposalCreatedBy", fields: [createdById], references: [id])
+  createdById     String
+  updatedBy       User     @relation("DisposalUpdatedBy", fields: [updatedById], references: [id])
+  updatedById     String
+}
+
+// Loss Report model
+model LossReport {
+  id              String   @id @default(cuid())
+  reportDate      DateTime @default(now())
+  discoveryDate   DateTime
+  description     String
+  estimatedValue  Float
+  policeReportNo  String?
+  policeReportDate DateTime?
+  status          String   // "reported", "investigating", "resolved", "written_off"
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  asset           Asset    @relation(fields: [assetId], references: [id])
+  assetId         String
+  masjid          Masjid   @relation(fields: [masjidId], references: [id])
+  masjidId        String
+  createdBy       User     @relation("LossCreatedBy", fields: [createdById], references: [id])
+  createdById     String
+  updatedBy       User     @relation("LossUpdatedBy", fields: [updatedById], references: [id])
+  updatedById     String
+}
+
+// Form Submission model for BR-AMS forms
+model FormSubmission {
+  id              String   @id @default(cuid())
+  formId          String   // Custom form ID (e.g., BR-AMS-001-2023-001)
+  formType        String   // "BR-AMS 001", "BR-AMS 002", etc.
+  title           String
+  content         Json     // JSON content of the form
+  status          String   // "draft", "submitted", "approved", "rejected"
+  submittedDate   DateTime?
+  approvedDate    DateTime?
+  rejectedDate    DateTime?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  masjid          Masjid   @relation(fields: [masjidId], references: [id])
+  masjidId        String
+  createdBy       User     @relation("FormCreatedBy", fields: [createdById], references: [id])
+  createdById     String
+  updatedBy       User     @relation("FormUpdatedBy", fields: [updatedById], references: [id])
+  updatedById     String
+  documents       FormDocument[]
+}
+
+// Form Document model for storing file references
+model FormDocument {
+  id              String   @id @default(cuid())
+  type            String   // "attachment", "supporting_document", etc.
+  fileName        String
+  fileUrl         String
+  fileSize        Int
+  mimeType        String
+  createdAt       DateTime @default(now())
+
+  // Relations
+  form            FormSubmission @relation(fields: [formId], references: [id])
+  formId          String
+}
+
+// Audit Log model
+model AuditLog {
+  id              String   @id @default(cuid())
+  action          String   // "CREATE", "UPDATE", "DELETE", "VIEW"
+  entity          String   // "Asset", "Form", "Maintenance", etc.
+  entityId        String
+  description     String
+  changes         String?  // JSON string of changes
+  ipAddress       String?
+  createdAt       DateTime @default(now())
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  masjid          Masjid   @relation(fields: [masjidId], references: [id])
+  masjidId        String
+}
