@@ -1,0 +1,198 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  BarChart3,
+  Building2,
+  ChevronDown,
+  Home,
+  Moon,
+  ListTodo,
+  Menu,
+  Search,
+  Settings,
+  Users,
+  Wifi,
+  WifiOff,
+  LayoutGrid,
+  UserIcon,
+  SettingsIcon,
+  LogOutIcon,
+  Bell,
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useMobile } from "@/hooks/use-mobile"
+import { useAuth } from "@/hooks/use-auth"
+
+export function ConsoleNavigation() {
+  const pathname = usePathname()
+  const [openTabs, setOpenTabs] = useState<string[]>([])
+  const [isOnline, setIsOnline] = useState(true)
+  const isMobile = useMobile()
+  const { user, logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    //router.push("/login")
+  }
+
+
+  // Hide on mobile since we're using bottom navigation
+  if (isMobile) {
+    return null // Return null instead of the header div
+  }
+
+  const isActive = (path: string) => pathname === path
+
+  const navItems = [
+    { name: "Home", path: "/", icon: <Home className="h-4 w-4" /> },
+    { name: "Organisasi", path: "/account", icon: <Building2 className="h-4 w-4" /> },
+    { name: "Aset", path: "/asset", icon: <Building2 className="h-4 w-4" /> },
+    { name: "Penggunaan", path: "/contacts", icon: <Users className="h-4 w-4" /> },
+    { name: "Projects", path: "/projects", icon: <ListTodo className="h-4 w-4" /> },
+    { name: "Reports", path: "/reports", icon: <BarChart3 className="h-4 w-4" /> },
+    { name: "Dashboard", path: "/dashboard", icon: <LayoutGrid className="h-4 w-4" /> },
+    { name: "Settings", path: "/settings", icon: <Settings className="h-4 w-4" /> },
+  ]
+
+  const openTabItems = [
+    { id: "home", name: "Home", path: "/" },
+    { id: "account", name: "Organisasi", path: "/account" },
+    { id: "asset", name: "Aset", path: "/asset" },
+    { id: "contacts", name: "Penggunaan", path: "/contacts" },
+    { id: "projects", name: "Projects", path: "/projects" },
+    { id: "reports", name: "Reports", path: "/reports" },
+    { id: "dashboard", name: "Dashboard", path: "/dashboard" },
+  ]
+
+  return (
+    <>
+      <div className="flex h-16 items-center border-b px-4 lg:px-6 bg-[#e2f1d6] text-black">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="lg:hidden text-black">
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[240px] sm:w-[280px] bg-[#004651] text-black">
+            <nav className="grid gap-2 py-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-2 text-sm rounded-md",
+                    isActive(item.path) ? "bg-[#004651] text-black" : "hover:bg-[#004651] hover:text-black",
+                  )}
+                >
+                  {item.icon}
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet>
+        <Link href="/" className="flex items-center gap-2 font-semibold text-lg text-black">
+          <Moon className="h-6 w-6" />
+          <span>Jabatan Agama Islam Selangor</span>
+        </Link>
+        <div className="ml-auto flex items-center gap-4">
+
+          <form className="hidden md:block">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4" />
+              <Input
+                type="search"
+                placeholder="Search..."
+                className="w-[200px] lg:w-[256px] pl-8 bg-primary-foreground text-primary"
+              />
+            </div>
+          </form>
+          <Button variant="ghost" size="icon" className="text-black">
+            <Settings className="h-5 w-5" />
+            <span className="sr-only">Settings</span>
+          </Button>
+          <Button variant="ghost" size="icon" className="text-black relative">
+            <Bell className="h-5 w-5" />
+            <span className="sr-only">Notifications</span>
+            <span className="absolute top-1 right-1 inline-block h-2 w-2 rounded-full bg-red-500"></span>
+          </Button>
+          {/* User Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src="/placeholder.svg" alt={user?.name || "User"} />
+                      <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user?.name || "User"}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user?.email || "user@example.com"}</p>
+                      <Badge variant="secondary" className="w-fit text-xs">
+                        {user?.role || "Admin"}
+                      </Badge>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    <span>Profil</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <SettingsIcon className="mr-2 h-4 w-4" />
+                    <span>Tetapan</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOutIcon className="mr-2 h-4 w-4" />
+                    <span>Log Keluar</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+        </div>
+      </div>
+      <div className="border-b flex bg-white">
+        <Link href="/" className="flex items-center gap-2 font-semibold text-lg text-[#004651] px-4">
+          <LayoutGrid className="h-6 w-6" />
+            <span className="text-base font-normal whitespace-nowrap">Sistem Pengurusan Aset</span>
+        </Link>
+        <Tabs defaultValue="home" className="w-full">
+          <TabsList className="w-full justify-start h-10 rounded-none bg-white px-2 border-b">
+            {openTabItems.map((tab) => (
+              <TabsTrigger
+                key={tab.id}
+                value={tab.id}
+                className="data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-[#004651] data-[state=active]:text-[#004651] rounded-none px-4 py-2"
+                asChild
+              >
+                <Link href={tab.path}>{tab.name}</Link>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+    </>
+  )
+}
+

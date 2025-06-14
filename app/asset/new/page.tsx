@@ -65,9 +65,9 @@ export default function NewAssetPage() {
 
       <div className="max-w-4xl mx-auto">
         <div className="text-center space-y-4 mb-8">
-          <h2 className="text-xl font-semibold">Pilih Jenis Borang Pendaftaran</h2>
+          <h2 className="text-xl font-semibold">Pilih Jenis Pendaftaran</h2>
           <p className="text-muted-foreground">
-            Sila pilih borang yang sesuai berdasarkan jenis aset yang ingin didaftarkan
+            Sila pilih pendaftaran yang sesuai berdasarkan jenis aset yang ingin didaftarkan
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export default function NewAssetPage() {
                   <li>Aset bernilai RM 1,000 ke atas</li>
                 </ul>
               </div>
-              <Button className="w-full">Pilih Borang Ini</Button>
+              <Button className="w-full">Pilih</Button>
             </CardContent>
           </Card>
 
@@ -126,7 +126,7 @@ export default function NewAssetPage() {
                   <li>Item bernilai rendah (kurang RM 1,000)</li>
                 </ul>
               </div>
-              <Button className="w-full">Pilih Borang Ini</Button>
+              <Button className="w-full">Pilih</Button>
             </CardContent>
           </Card>
         </div>

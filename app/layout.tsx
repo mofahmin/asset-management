@@ -6,11 +6,13 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { LanguageProvider } from "@/lib/language-context"
 import MainLayout from "@/components/main-layout"
+import { ConsoleNavigation } from "@/components/layout/console-navigation"
+
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Sistem Pengurusan Aset Masjid & Surau",
+  title: "Sistem Pengurusan Aset",
   description: "Sistem pengurusan aset untuk masjid dan surau mengikut garis panduan JAIS",
     generator: 'v0.dev'
 }
@@ -23,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <ConsoleNavigation />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <LanguageProvider>
             <MainLayout>{children}</MainLayout>

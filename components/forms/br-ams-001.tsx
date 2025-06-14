@@ -106,7 +106,7 @@ export default function BRMS001Form() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-bold">BORANG BR-AMS 001</h1>
+        <h1 className="text-2xl font-bold">BR-AMS 001</h1>
         <p className="text-lg font-semibold">PENDAFTARAN HARTA MODAL</p>
         <p className="text-sm text-muted-foreground">
           No. Rujukan: BR-AMS-001-{new Date().getFullYear()}-
