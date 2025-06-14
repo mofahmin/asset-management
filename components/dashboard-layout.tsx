@@ -33,6 +33,7 @@ import {
 import { useToast } from "@/components/ui/use-toast"
 import { useLanguage } from "@/lib/language-context"
 import LanguageSwitcher from "@/components/language-switcher"
+import { useAuth } from "@/hooks/use-auth"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -44,27 +45,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { toast } = useToast()
   const { t } = useLanguage()
 
-  // Mock user data - in a real app, this would come from your auth system
-  const user = {
+  // Replace the mock user data with:
+  const { user: authUser, logout: authLogout } = useAuth()
+
+  // Use authUser instead of the mock user:
+  const user = authUser || {
     name: "Ahmad Bin Abdullah",
     email: "ahmad@example.com",
     role: "Pegawai Aset",
     masjid: "Masjid Al-Hidayah",
-    avatar: "", // Remove the placeholder URL
+    avatar: "",
   }
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // Handle logout
+  // Update the handleLogout function:
   const handleLogout = () => {
-    // TODO: Implement actual logout logic
+    authLogout()
     toast({
       title: t("auth.logout_success"),
-      description: t("auth.logout_success"),
+      description: "Anda telah berjaya log keluar.",
     })
-    // Redirect to login page
     window.location.href = "/login"
   }
 

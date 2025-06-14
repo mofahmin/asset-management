@@ -11,11 +11,13 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChurchIcon as MosqueIcon } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const { login } = useAuth()
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -25,26 +27,30 @@ export default function LoginPage() {
     const email = formData.get("email") as string
     const password = formData.get("password") as string
 
-    // TODO: Implement actual authentication
     try {
-      // Simulate authentication
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // For demo purposes, hardcode a successful login
       if (email && password) {
-        // Redirect to dashboard
+        await login(email, password)
+
+        toast({
+          title: "Log masuk berjaya",
+          description: "Anda telah berjaya log masuk ke sistem.",
+        })
+
+        // Set cookie for middleware
+        document.cookie = "auth-token=demo-token; path=/"
+
         router.push("/dashboard")
       } else {
         toast({
           title: "Error",
-          description: "Invalid email or password",
+          description: "Sila masukkan email dan kata laluan",
           variant: "destructive",
         })
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "An error occurred during login",
+        description: "Ralat semasa log masuk",
         variant: "destructive",
       })
     } finally {
@@ -60,7 +66,8 @@ export default function LoginPage() {
             <MosqueIcon className="h-10 w-10 text-blue-500" />
           </div>
           <CardTitle className="text-2xl text-center">Log Masuk</CardTitle>
-          <CardDescription className="text-center">Masukkan maklumat log masuk anda untuk akses sistem</CardDescription>
+          <CardDescription className="text-center">Masukkan maklumat log masuk anda untuk akses sistem.
+          Letak je email and password pape skang!</CardDescription>
         </CardHeader>
         <form onSubmit={onSubmit}>
           <CardContent className="space-y-4">
