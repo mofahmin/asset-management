@@ -158,10 +158,14 @@ export default function FormsPage() {
                   </TableRow>
                 ) : (
                   filteredForms.map((form) => (
-                    <TableRow key={form.id}>
+                    <TableRow key={form.id} className="cursor-pointer hover:bg-muted/50">
                       <TableCell className="font-mono text-xs">{form.id}</TableCell>
                       <TableCell className="font-medium">{form.name}</TableCell>
-                      <TableCell className="hidden md:table-cell">{form.title}</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <Link href={`/forms/${form.id}`} className="hover:underline">
+                          {form.title}
+                        </Link>
+                      </TableCell>
                       <TableCell className="hidden lg:table-cell">{form.submittedBy}</TableCell>
                       <TableCell className="hidden md:table-cell">
                         {new Date(form.submittedDate).toLocaleDateString("ms-MY")}
@@ -180,9 +184,11 @@ export default function FormsPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Tindakan</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                              <FileTextIcon className="mr-2 h-4 w-4" />
-                              Lihat Borang
+                            <DropdownMenuItem asChild>
+                              <Link href={`/forms/${form.id}`}>
+                                <FileTextIcon className="mr-2 h-4 w-4" />
+                                Lihat Borang
+                              </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <PrinterIcon className="mr-2 h-4 w-4" />

@@ -1,5 +1,7 @@
 "use client"
 
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
+
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -9,7 +11,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -196,11 +197,13 @@ export default function MaintenancePage() {
                   </TableRow>
                 ) : (
                   filteredRecords.map((record) => (
-                    <TableRow key={record.id}>
+                    <TableRow key={record.id} className="cursor-pointer hover:bg-muted/50">
                       <TableCell>{record.id}</TableCell>
                       <TableCell className="font-medium">
                         <div>
-                          <div>{record.assetName}</div>
+                          <Link href={`/maintenance/${record.id}`} className="hover:underline">
+                            {record.assetName}
+                          </Link>
                           <div className="text-xs text-muted-foreground">{record.assetId}</div>
                         </div>
                       </TableCell>
@@ -227,9 +230,11 @@ export default function MaintenancePage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Tindakan</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                              <FileTextIcon className="mr-2 h-4 w-4" />
-                              Lihat Butiran
+                            <DropdownMenuItem asChild>
+                              <Link href={`/maintenance/${record.id}`}>
+                                <FileTextIcon className="mr-2 h-4 w-4" />
+                                Lihat Butiran
+                              </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <EditIcon className="mr-2 h-4 w-4" />

@@ -2,26 +2,11 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import {
-  ChurchIcon as MosqueIcon,
-  LayoutDashboardIcon,
-  PackageIcon,
-  ClipboardIcon,
-  WrenchIcon,
-  TrashIcon,
-  AlertTriangleIcon,
-  SettingsIcon,
-  UsersIcon,
-  MenuIcon,
-  LogOutIcon,
-  ChevronDownIcon,
-} from "lucide-react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,237 +15,186 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useToast } from "@/components/ui/use-toast"
-import { useLanguage } from "@/lib/language-context"
-import LanguageSwitcher from "@/components/language-switcher"
+import { Badge } from "@/components/ui/badge"
+import {
+  HomeIcon,
+  PackageIcon,
+  FileTextIcon,
+  WrenchIcon,
+  TrashIcon,
+  AlertTriangleIcon,
+  HistoryIcon,
+  SettingsIcon,
+  LogOutIcon,
+  UserIcon,
+  MenuIcon,
+  XIcon,
+  BuildingIcon,
+} from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
+import AppSwitcher from "./app-switcher"
+
+const navigation = [
+  { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
+  { name: "Aset", href: "/assets", icon: PackageIcon },
+  { name: "Borang", href: "/forms", icon: FileTextIcon },
+  { name: "Penyelenggaraan", href: "/maintenance", icon: WrenchIcon },
+  { name: "Pelupusan", href: "/disposals", icon: TrashIcon },
+  { name: "Kehilangan", href: "/losses", icon: AlertTriangleIcon },
+  { name: "Log Audit", href: "/audit-log", icon: HistoryIcon },
+  { name: "Tetapan", href: "/settings", icon: SettingsIcon },
+]
 
 interface DashboardLayoutProps {
   children: React.ReactNode
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [isMounted, setIsMounted] = useState(false)
   const pathname = usePathname()
-  const { toast } = useToast()
-  const { t } = useLanguage()
+  const router = useRouter()
+  const { user, logout } = useAuth()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [currentAssetType, setCurrentAssetType] = useState<"movable" | "immovable">("movable")
 
-  // Replace the mock user data with:
-  const { user: authUser, logout: authLogout } = useAuth()
-
-  // Use authUser instead of the mock user:
-  const user = authUser || {
-    name: "Ahmad Bin Abdullah",
-    email: "ahmad@example.com",
-    role: "Pegawai Aset",
-    masjid: "Masjid Al-Hidayah",
-    avatar: "",
-  }
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  // Update the handleLogout function:
   const handleLogout = () => {
-    authLogout()
-    toast({
-      title: t("auth.logout_success"),
-      description: "Anda telah berjaya log keluar.",
-    })
-    window.location.href = "/login"
+    logout()
+    router.push("/login")
   }
 
-  // Navigation items based on user role
-  const navigationItems = [
-    {
-      name: t("dashboard.title"),
-      href: "/dashboard",
-      icon: <LayoutDashboardIcon className="h-5 w-5" />,
-      roles: ["Admin", "Pegawai Aset", "Pegawai Pengawal", "Jawatankuasa"],
-    },
-    {
-      name: t("assets.title"),
-      href: "/assets",
-      icon: <PackageIcon className="h-5 w-5" />,
-      roles: ["Admin", "Pegawai Aset", "Pegawai Pengawal", "Jawatankuasa"],
-    },
-    {
-      name: t("forms.title"),
-      href: "/forms",
-      icon: <ClipboardIcon className="h-5 w-5" />,
-      roles: ["Admin", "Pegawai Aset", "Pegawai Pengawal"],
-    },
-    {
-      name: t("maintenance.title"),
-      href: "/maintenance",
-      icon: <WrenchIcon className="h-5 w-5" />,
-      roles: ["Admin", "Pegawai Aset", "Pegawai Pengawal"],
-    },
-    {
-      name: t("disposals.title"),
-      href: "/disposals",
-      icon: <TrashIcon className="h-5 w-5" />,
-      roles: ["Admin", "Pegawai Aset", "Pegawai Pengawal"],
-    },
-    {
-      name: t("losses.title"),
-      href: "/losses",
-      icon: <AlertTriangleIcon className="h-5 w-5" />,
-      roles: ["Admin", "Pegawai Aset", "Pegawai Pengawal"],
-    },
-    {
-      name: t("settings.users"),
-      href: "/users",
-      icon: <UsersIcon className="h-5 w-5" />,
-      roles: ["Admin"],
-    },
-    {
-      name: t("settings.title"),
-      href: "/settings",
-      icon: <SettingsIcon className="h-5 w-5" />,
-      roles: ["Admin", "Pegawai Aset"],
-    },
-  ]
-
-  // Filter navigation items based on user role
-  const filteredNavItems = navigationItems.filter((item) => item.roles.includes(user.role))
-
-  if (!isMounted) {
-    return null
+  const handleAssetTypeChange = (type: "movable" | "immovable") => {
+    setCurrentAssetType(type)
+    // You can add logic here to filter content based on asset type
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Mobile Header */}
-      <header className="sticky top-0 z-40 border-b bg-background lg:hidden">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MosqueIcon className="h-6 w-6" />
-            <span className="font-bold">{t("app.name")}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <LanguageSwitcher />
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <MenuIcon className="h-5 w-5" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-64">
-                <div className="flex flex-col h-full">
-                  <div className="flex items-center gap-2 py-4">
-                    <MosqueIcon className="h-6 w-6" />
-                    <span className="font-bold">{t("app.name")}</span>
-                  </div>
-                  <div className="border-t py-4">
-                    <p className="text-sm font-medium">{user.masjid}</p>
-                  </div>
-                  <nav className="flex-1 space-y-1">
-                    {filteredNavItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                          pathname === item.href
-                            ? "bg-primary text-primary-foreground"
-                            : "hover:bg-accent hover:text-accent-foreground"
-                        }`}
-                      >
-                        {item.icon}
-                        {item.name}
-                      </Link>
-                    ))}
-                  </nav>
-                  <div className="border-t py-4">
-                    <Button variant="ghost" className="w-full justify-start gap-3" onClick={handleLogout}>
-                      <LogOutIcon className="h-5 w-5" />
-                      {t("auth.logout")}
-                    </Button>
-                  </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Top Navigation */}
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo and Brand */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                  <BuildingIcon className="h-5 w-5 text-white" />
                 </div>
-              </SheetContent>
-            </Sheet>
+                <div className="hidden sm:block">
+                  <h1 className="text-lg font-semibold text-gray-900">Sistem Pengurusan Aset</h1>
+                  <p className="text-xs text-gray-500">Masjid Al-Hidayah</p>
+                </div>
+              </div>
+
+              {/* App Switcher */}
+              <div className="hidden lg:block">
+                <AppSwitcher currentType={currentAssetType} onTypeChange={handleAssetTypeChange} />
+              </div>
+            </div>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-1">
+              {navigation.map((item) => {
+                const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      isActive ? "bg-green-100 text-green-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    }`}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span className="hidden lg:block">{item.name}</span>
+                  </Link>
+                )
+              })}
+            </nav>
+
+            {/* User Menu */}
+            <div className="flex items-center gap-4">
+              {/* Mobile App Switcher */}
+              <div className="lg:hidden">
+                <AppSwitcher currentType={currentAssetType} onTypeChange={handleAssetTypeChange} />
+              </div>
+
+              {/* User Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src="/placeholder.svg" alt={user?.name || "User"} />
+                      <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user?.name || "User"}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user?.email || "user@example.com"}</p>
+                      <Badge variant="secondary" className="w-fit text-xs">
+                        {user?.role || "Admin"}
+                      </Badge>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    <span>Profil</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <SettingsIcon className="mr-2 h-4 w-4" />
+                    <span>Tetapan</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOutIcon className="mr-2 h-4 w-4" />
+                    <span>Log Keluar</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Mobile Menu Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <XIcon className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+              </Button>
+            </div>
           </div>
+
+          {/* Mobile Navigation */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t bg-white">
+              <div className="px-2 pt-2 pb-3 space-y-1">
+                {navigation.map((item) => {
+                  const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                        isActive ? "bg-green-100 text-green-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      {item.name}
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
-      <div className="flex flex-1">
-        {/* Desktop Sidebar */}
-        <aside className="hidden lg:flex w-64 flex-col border-r">
-          <div className="flex h-16 items-center gap-2 border-b px-6">
-            <MosqueIcon className="h-6 w-6" />
-            <span className="font-bold">{t("app.name")}</span>
-          </div>
-          <div className="border-b py-4 px-6">
-            <p className="text-sm font-medium">{user.masjid}</p>
-          </div>
-          <nav className="flex-1 space-y-1 p-4">
-            {filteredNavItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                  pathname === item.href
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-accent hover:text-accent-foreground"
-                }`}
-              >
-                {item.icon}
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-          <div className="border-t p-4">
-            <Button variant="ghost" className="w-full justify-start gap-3" onClick={handleLogout}>
-              <LogOutIcon className="h-5 w-5" />
-              {t("auth.logout")}
-            </Button>
-          </div>
-        </aside>
-
-        <div className="flex flex-1 flex-col">
-          {/* Desktop Header */}
-          <header className="hidden lg:flex h-16 items-center gap-4 border-b bg-background px-6">
-            <div className="flex-1">
-              <h1 className="text-lg font-semibold">
-                {filteredNavItems.find((item) => item.href === pathname)?.name || t("dashboard.title")}
-              </h1>
-            </div>
-            <LanguageSwitcher />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 flex items-center gap-2 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div className="hidden lg:flex flex-col items-start">
-                    <span className="text-sm font-medium">{user.name}</span>
-                    <span className="text-xs text-muted-foreground">{user.role}</span>
-                  </div>
-                  <ChevronDownIcon className="h-4 w-4 text-muted-foreground" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{t("common.details")}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/profile">Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/settings">{t("settings.title")}</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>{t("auth.logout")}</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </header>
-
-          {/* Main Content */}
-          <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
-        </div>
-      </div>
+      {/* Main Content */}
+      <main className="flex-1">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">{children}</div>
+      </main>
     </div>
   )
 }

@@ -113,7 +113,7 @@ export default function AssetsPage() {
           <Link href="/assets/new">
             <Button>
               <PlusIcon className="h-4 w-4 mr-2" />
-              Aset Baru
+              Daftar Aset Baru
             </Button>
           </Link>
           <Button variant="outline">
@@ -173,8 +173,8 @@ export default function AssetsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Nama Aset</TableHead>
+                  <TableHead>NOMBOR SIRI PENDAFTARAN</TableHead>
+                  <TableHead>KETERANGAN ASET</TableHead>
                   <TableHead className="hidden md:table-cell">Kategori</TableHead>
                   <TableHead className="hidden md:table-cell">Jenis</TableHead>
                   <TableHead className="hidden lg:table-cell">Lokasi</TableHead>
@@ -193,9 +193,13 @@ export default function AssetsPage() {
                   </TableRow>
                 ) : (
                   filteredAssets.map((asset) => (
-                    <TableRow key={asset.id}>
+                    <TableRow key={asset.id} className="cursor-pointer hover:bg-muted/50">
                       <TableCell>{asset.id}</TableCell>
-                      <TableCell className="font-medium">{asset.name}</TableCell>
+                      <TableCell className="font-medium">
+                        <Link href={`/assets/${asset.id}`} className="hover:underline">
+                          {asset.name}
+                        </Link>
+                      </TableCell>
                       <TableCell className="hidden md:table-cell">{asset.category}</TableCell>
                       <TableCell className="hidden md:table-cell">{asset.type}</TableCell>
                       <TableCell className="hidden lg:table-cell">{asset.location}</TableCell>
@@ -217,9 +221,11 @@ export default function AssetsPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Tindakan</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                              <FileTextIcon className="mr-2 h-4 w-4" />
-                              Lihat Butiran
+                            <DropdownMenuItem asChild>
+                              <Link href={`/assets/${asset.id}`}>
+                                <FileTextIcon className="mr-2 h-4 w-4" />
+                                Lihat Butiran
+                              </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                               <EditIcon className="mr-2 h-4 w-4" />

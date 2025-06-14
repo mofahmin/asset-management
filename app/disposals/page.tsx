@@ -195,11 +195,13 @@ export default function DisposalsPage() {
                   </TableRow>
                 ) : (
                   filteredRequests.map((request) => (
-                    <TableRow key={request.id}>
+                    <TableRow key={request.id} className="cursor-pointer hover:bg-muted/50">
                       <TableCell>{request.id}</TableCell>
                       <TableCell className="font-medium">
                         <div>
-                          <div>{request.assetName}</div>
+                          <Link href={`/disposals/${request.id}`} className="hover:underline">
+                            {request.assetName}
+                          </Link>
                           <div className="text-xs text-muted-foreground">{request.assetId}</div>
                         </div>
                       </TableCell>
@@ -222,9 +224,11 @@ export default function DisposalsPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Tindakan</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                              <FileTextIcon className="mr-2 h-4 w-4" />
-                              Lihat Butiran
+                            <DropdownMenuItem asChild>
+                              <Link href={`/disposals/${request.id}`}>
+                                <FileTextIcon className="mr-2 h-4 w-4" />
+                                Lihat Butiran
+                              </Link>
                             </DropdownMenuItem>
                             {request.approvalStatus === "Menunggu Kelulusan" && (
                               <>

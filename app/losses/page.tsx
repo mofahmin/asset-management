@@ -182,11 +182,13 @@ export default function LossesPage() {
                   </TableRow>
                 ) : (
                   filteredReports.map((report) => (
-                    <TableRow key={report.id}>
+                    <TableRow key={report.id} className="cursor-pointer hover:bg-muted/50">
                       <TableCell>{report.id}</TableCell>
                       <TableCell className="font-medium">
                         <div>
-                          <div>{report.assetName}</div>
+                          <Link href={`/losses/${report.id}`} className="hover:underline">
+                            {report.assetName}
+                          </Link>
                           <div className="text-xs text-muted-foreground">{report.assetId}</div>
                         </div>
                       </TableCell>
@@ -212,9 +214,11 @@ export default function LossesPage() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Tindakan</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                              <FileTextIcon className="mr-2 h-4 w-4" />
-                              Lihat Butiran
+                            <DropdownMenuItem asChild>
+                              <Link href={`/losses/${report.id}`}>
+                                <FileTextIcon className="mr-2 h-4 w-4" />
+                                Lihat Butiran
+                              </Link>
                             </DropdownMenuItem>
                             {report.status === "Dilaporkan" && (
                               <>
