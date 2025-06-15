@@ -9,7 +9,7 @@ export default function Home() {
         <div className="container flex h-16 items-center justify-between py-4">
           <div className="flex items-center gap-2">
             <MosqueIcon className="h-6 w-6" />
-            <span className="text-xl font-bold">SistemAset</span>
+            <span className="text-xl font-bold">Sistem Pengurusan Aset</span>
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/login">
@@ -27,10 +27,10 @@ export default function Home() {
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="space-y-4">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                  Sistem Pengurusan Aset Masjid & Surau
+                  Sistem Pengurusan Aset
                 </h1>
                 <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Pengurusan aset yang efisien dan mematuhi garis panduan JAIS untuk masjid dan surau di Selangor.
+                  Pengurusan aset yang efisien.
                 </p>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Link href="/login">
@@ -60,7 +60,7 @@ export default function Home() {
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Ciri-ciri Utama</h2>
                 <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Sistem pengurusan aset yang komprehensif untuk masjid dan surau
+                  Sistem pengurusan aset yang komprehensif.
                 </p>
               </div>
             </div>
@@ -79,7 +79,7 @@ export default function Home() {
       <footer className="border-t py-6 md:py-0">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
           <p className="text-center text-sm leading-loose text-gray-500 md:text-left">
-            &copy; {new Date().getFullYear()} SistemAset. Hak cipta terpelihara.
+            &copy; {new Date().getFullYear()} Sistem Pengurusan Aset. Hak cipta terpelihara.
           </p>
           <div className="flex items-center gap-4">
             <Link href="/terms" className="text-sm text-gray-500 underline-offset-4 hover:underline">
@@ -97,33 +97,33 @@ export default function Home() {
 
 const features = [
   {
-    title: "Pengurusan Aset",
-    description: "Urus aset alih dan tak alih dengan mudah mengikut garis panduan JAIS.",
+    title: "Inventori Masa Nyata",
+    description: "Pantau status dan lokasi aset secara langsung dengan kemas kini masa nyata.",
     icon: <MosqueIcon className="h-6 w-6" />,
   },
   {
-    title: "Borang Digital",
-    description: "Borang BR-AMS 001-008 dalam format digital dengan kemudahan muat naik fail.",
+    title: "Pemberitahuan Pintar",
+    description: "Terima pemberitahuan automatik untuk penyelenggaraan dan tarikh luput aset.",
     icon: <MosqueIcon className="h-6 w-6" />,
   },
   {
-    title: "Laporan Komprehensif",
-    description: "Jana laporan dan analisis untuk pemantauan aset yang lebih baik.",
+    title: "Integrasi Kod QR",
+    description: "Imbas kod QR untuk akses pantas kepada maklumat aset dan sejarah penyelenggaraan.",
     icon: <MosqueIcon className="h-6 w-6" />,
   },
   {
-    title: "Kawalan Akses",
-    description: "Kawalan akses berdasarkan peranan untuk keselamatan data.",
+    title: "Pengurusan Pengguna",
+    description: "Urus peranan dan kebenaran pengguna dengan mudah untuk keselamatan maksimum.",
     icon: <MosqueIcon className="h-6 w-6" />,
   },
   {
-    title: "Audit Log",
-    description: "Jejak audit untuk semua aktiviti dalam sistem.",
+    title: "Analitik Visual",
+    description: "Lihat data aset dalam bentuk carta dan graf untuk analisis yang lebih mendalam.",
     icon: <MosqueIcon className="h-6 w-6" />,
   },
   {
-    title: "Sokongan Pelbagai Bahasa",
-    description: "Tersedia dalam Bahasa Melayu dan Bahasa Inggeris.",
+    title: "Sokongan Mudah Alih",
+    description: "Akses sistem melalui peranti mudah alih untuk pengurusan di mana-mana.",
     icon: <MosqueIcon className="h-6 w-6" />,
   },
 ]
