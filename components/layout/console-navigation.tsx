@@ -56,13 +56,10 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
     //router.push("/login")
   }
 
-
-
-
   const isActive = (path: string) => pathname === path
 
   const navItems = [
-    { name: "Home", path: "/", icon: <Home className="h-4 w-4" /> },
+    { name: "Home", path: "/home", icon: <Home className="h-4 w-4" /> },
     { name: "Organisasi", path: "/account", icon: <Building2 className="h-4 w-4" /> },
     { name: "Aset", path: "/asset", icon: <Building2 className="h-4 w-4" /> },
     { name: "Penggunaan", path: "/contacts", icon: <Users className="h-4 w-4" /> },
@@ -73,7 +70,7 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
   ]
 
   const openTabItems = [
-    { id: "home", name: "Home", path: "/" },
+    { id: "home", name: "Home", path: "/home" },
     { id: "account", name: "Organisasi", path: "/account" },
     { id: "asset", name: "Aset", path: "/asset" },
     { id: "contacts", name: "Penggunaan", path: "/contacts" },
@@ -82,23 +79,7 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
     { id: "dashboard", name: "Dashboard", path: "/dashboard" },
   ]
 
-  const navigation = [
-    // { name: "", href: "/dashboard", icon: HomeIcon },
-    // { name: "Aset", href: "/asset", icon: PackageIcon },
-    // { name: "Penggunaan", href: "/forms", icon: FileTextIcon },
-    // { name: "Penggunaan", href: "/forms", icon: FileTextIcon },
-    // { name: "Pinjaman & Pergerakan", href: "/forms", icon: FileTextIcon },
-    // { name: "Penyimpanan", href: "/forms", icon: FileTextIcon },
-    // { name: "Pemeriksaan", href: "/forms", icon: FileTextIcon },
-    // { name: "Penyelenggaraan", href: "/maintenance", icon: WrenchIcon },
-    // { name: "Pelupusan", href: "/disposals", icon: TrashIcon },
-    // { name: "Kehilangan & Hapus Kira", href: "/losses", icon: AlertTriangleIcon },
-    // { name: "Laporan", href: "/audit-log", icon: HistoryIcon },
-    // { name: "Log Audit", href: "/audit-log", icon: HistoryIcon },
-    // { name: "Tetapan", href: "/settings", icon: SettingsIcon },
-  ]
-
-    //Hide on mobile since we're using bottom navigation
+  //Hide on mobile since we're using bottom navigation
   if (isMobile) {
     return (
       <>
@@ -176,158 +157,121 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
     )
   }
 
-
   return (
-    <>
-      <div className="flex h-16 items-center border-b px-4 lg:px-6 bg-[#e2f1d6] text-black">
-        <Link href="/" className="flex items-center gap-2 font-semibold text-lg text-black">
-          <Moon className="h-8 w-8" />
-          <span>Jabatan Agama Islam Selangor</span>
-        </Link>
-        <div className="ml-auto flex items-center gap-4">
-
-          <form className="hidden md:block">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4" />
-              <Input
-                type="search"
-                placeholder="Search..."
-                className="w-[200px] lg:w-[256px] pl-8 bg-primary-foreground text-primary"
-              />
-            </div>
-          </form>
-
-          <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+    <div className="flex min-h-screen w-full flex-col">
+      <header className="sticky top-0 z-40 border-b bg-[#e2f1d6] text-black">
+        <div className="container flex h-16 items-center justify-between py-4">
+          <Link href="/home" className="flex items-center gap-2 font-semibold text-lg text-black">
+            <Moon className="h-8 w-8" />
+            <span>Jabatan Agama Islam Selangor</span>
+          </Link>
+          <div className="ml-auto flex items-center gap-4">
+            <form className="hidden md:block">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4" />
+                <Input
+                  type="search"
+                  placeholder="Search..."
+                  className="w-[200px] lg:w-[256px] pl-8 bg-primary-foreground text-primary"
+                />
+              </div>
+            </form>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="text-black">
                   <Settings className="h-8 w-8" />
                   <span className="sr-only">Settings</span>
                 </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user?.name || "User"}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{user?.email || "user@example.com"}</p>
-                      <Badge variant="secondary" className="w-fit text-xs">
-                        {user?.role || "Admin"}
-                      </Badge>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <UserIcon className="mr-2 h-4 w-4" />
-                    <span>Profil</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <SettingsIcon className="mr-2 h-4 w-4" />
-                    <span>Tetapan</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOutIcon className="mr-2 h-4 w-4" />
-                    <span>Log Keluar</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-
-          
-          <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-black relative">
-                    <Bell className="h-8 w-8" />
-                    <span className="sr-only">Notifications</span>
-                    <span className="absolute top-1 right-1 inline-block h-2 w-2 rounded-full bg-red-500"></span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user?.name || "User"}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{user?.email || "user@example.com"}</p>
-                      <Badge variant="secondary" className="w-fit text-xs">
-                        {user?.role || "Admin"}
-                      </Badge>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <UserIcon className="mr-2 h-4 w-4" />
-                    <span>Profil</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <SettingsIcon className="mr-2 h-4 w-4" />
-                    <span>Tetapan</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOutIcon className="mr-2 h-4 w-4" />
-                    <span>Log Keluar</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-          {/* User Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="default" className="relative h-8 w-8 rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder.svg" alt={user?.name || "User"} />
-                      <AvatarFallback>{user?.name?.charAt(0) || "U"}                                                  
-                        <UserIcon className="h-5 w-5 text-black" />
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user?.name || "User"}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{user?.email || "user@example.com"}</p>
-                      <Badge variant="secondary" className="w-fit text-xs">
-                        {user?.role || "Admin"}
-                      </Badge>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <UserIcon className="mr-2 h-4 w-4" />
-                    <span>Profil</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <SettingsIcon className="mr-2 h-4 w-4" />
-                    <span>Tetapan</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOutIcon className="mr-2 h-4 w-4" />
-                    <span>Log Keluar</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user?.name || "User"}</p>
+                    <p className="text-xs leading-none text-muted-foreground">{user?.email || "user@example.com"}</p>
+                    <Badge variant="secondary" className="w-fit text-xs">
+                      {user?.role || "Admin"}
+                    </Badge>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <UserIcon className="mr-2 h-4 w-4" />
+                  <span>Profil</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <SettingsIcon className="mr-2 h-4 w-4" />
+                  <span>Tetapan</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOutIcon className="mr-2 h-4 w-4" />
+                  <span>Log Keluar</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-black relative">
+                  <Bell className="h-8 w-8" />
+                  <span className="sr-only">Notifications</span>
+                  <span className="absolute top-1 right-1 inline-block h-2 w-2 rounded-full bg-red-500"></span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user?.name || "User"}</p>
+                    <p className="text-xs leading-none text-muted-foreground">{user?.email || "user@example.com"}</p>
+                    <Badge variant="secondary" className="w-fit text-xs">
+                      {user?.role || "Admin"}
+                    </Badge>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <UserIcon className="mr-2 h-4 w-4" />
+                  <span>Profil</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <SettingsIcon className="mr-2 h-4 w-4" />
+                  <span>Tetapan</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOutIcon className="mr-2 h-4 w-4" />
+                  <span>Log Keluar</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-      </div>
-      <div className="border-b flex bg-white">
-        <Link href="/" className="flex items-center gap-2 font-semibold text-lg text-[#004651] px-4">
-          <LayoutGrid className="h-6 w-6" />
-            <span className="text-base font-normal whitespace-nowrap">Sistem Pengurusan Aset</span>
-        </Link>
-        <Tabs defaultValue="home" className="w-full">
-          <TabsList className="w-full justify-start h-10 rounded-none bg-white px-2 border-b">
-            {openTabItems.map((tab) => (
-              <TabsTrigger
-                key={tab.id}
-                value={tab.id}
-                className="data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-[#004651] data-[state=active]:text-[#004651] rounded-none px-4 py-2"
-                asChild
-              >
-                <Link href={tab.path}>{tab.name}</Link>
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      </div>
-    </>
+        <nav className="hidden md:flex items-center gap-4 border-b px-4 lg:px-6 py-2 bg-white">
+          <Link href="/home" className={cn(
+            "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 hover:bg-accent hover:text-accent-foreground",
+            pathname === "/home" ? "bg-gray-100 text-black" : "text-black hover:bg-gray-200"
+          )}>
+            <LayoutGrid className="mr-2 h-4 w-4" />
+            Sistem Pengurusan Aset
+          </Link>
+          {openTabItems.map((item) => (
+            <Link
+              key={item.path}
+              href={item.path}
+              className={cn(
+                "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 hover:bg-accent hover:text-accent-foreground",
+                isActive(item.path) ? "bg-gray-100 text-black" : "text-black hover:bg-gray-200",
+                item.id === "home" ? "hidden" : ""
+              )}
+            >
+              {item.name}
+            </Link>
+          ))}
+        </nav>
+      </header>
+      <main className="flex-1">
+        {children}
+      </main>
+    </div>
   )
 }
 
