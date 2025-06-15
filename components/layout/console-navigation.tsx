@@ -214,7 +214,7 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
 
   return (
     <>
-      <div className="flex h-16 items-center border-b px-4 lg:px-6 bg-[#e2f1d6] text-black">
+      <div className="flex h-16 items-center border-b px-4 lg:px-6 text-black">
         <Link
           href="/"
           className="flex items-center gap-2 font-semibold text-lg text-black"
