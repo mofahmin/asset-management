@@ -13,10 +13,12 @@ export async function middleware(request: NextRequest) {
   // Check if user is authenticated
   const hasAuthToken = token === "demo-token"
 
-  // Redirect logic
-  if (isPublicPath && hasAuthToken) {
-    // If user is logged in and trying to access a public path, redirect to dashboard
-    return NextResponse.redirect(new URL("/", request.url))
+  // Only redirect from /login, /register, /forgot-password if already authenticated
+  if (
+    hasAuthToken &&
+    (path === "/login" || path === "/register" || path === "/forgot-password")
+  ) {
+    return NextResponse.redirect(new URL("/home", request.url))
   }
 
   if (!isPublicPath && !hasAuthToken) {
@@ -27,7 +29,6 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
   matcher: [
     "/",

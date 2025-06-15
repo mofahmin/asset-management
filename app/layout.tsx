@@ -32,14 +32,11 @@ export default function RootLayout({
           </LanguageProvider>
         </ThemeProvider>
       </body>
-          <div className="min-h-screen bg-gray-50">
-      
-
-      {/* Main Content */}
-      <main className="flex-1">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">{children}</div>
-      </main>
-    </div>
+      {/* <div className="min-h-screen bg-gray-50">
+              <main className="flex-1">
+          <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">{children}</div>
+        </main>
+      </div> */}
     </html>
   )
 }

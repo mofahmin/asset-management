@@ -29,7 +29,6 @@ export function RecordHeader({ title, subtitle, entityName, onEdit, onDelete }: 
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
                 <MoreHorizontal className="mr-2 h-4 w-4" />
-                Actions
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

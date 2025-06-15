@@ -64,20 +64,20 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
   const navItems = [
     { name: "Home", path: "/home", icon: <Home className="h-4 w-4" /> },
     { name: "Organisasi", path: "/account", icon: <Building2 className="h-4 w-4" /> },
-    { name: "Aset", path: "/asset", icon: <Building2 className="h-4 w-4" /> },
-    { name: "Penggunaan", path: "/contacts", icon: <Users className="h-4 w-4" /> },
-    { name: "Projects", path: "/projects", icon: <ListTodo className="h-4 w-4" /> },
+    { name: "Aset Alih", path: "/asset", icon: <Building2 className="h-4 w-4" /> },
+    { name: "Aset Tak Alih", path: "/asset", icon: <Users className="h-4 w-4" /> },
     { name: "Reports", path: "/reports", icon: <BarChart3 className="h-4 w-4" /> },
     { name: "Dashboard", path: "/dashboard", icon: <LayoutGrid className="h-4 w-4" /> },
-    { name: "Settings", path: "/settings", icon: <Settings className="h-4 w-4" /> },
   ]
 
   const openTabItems = [
     { id: "home", name: "Home", path: "/home" },
     { id: "account", name: "Organisasi", path: "/account" },
-    { id: "asset", name: "Aset", path: "/asset" },
-    { id: "contacts", name: "Penggunaan", path: "/contacts" },
-    { id: "projects", name: "Projects", path: "/projects" },
+    { id: "asset", name: "Aset Alih", path: "/asset" },
+    // { id: "asset", name: "Aset Tak Alih", path: "/asset" },
+    { id: "maintenance", name: "Penyelenggaraan", path: "/maintenance" },
+    { id: "disposals", name: "Pelupusan", path: "/disposal" },
+    { id: "losses", name: "Kehilangan & Hapus Kira", path: "/losses" },
     { id: "reports", name: "Reports", path: "/reports" },
     { id: "dashboard", name: "Dashboard", path: "/dashboard" },
   ]
@@ -308,7 +308,7 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
         </div>
       </div>
       <div className="border-b flex bg-white">
-        <Link href="/" className="flex items-center gap-2 font-semibold text-lg text-[#004651] px-4">
+        <Link href="/home" className="flex items-center gap-2 font-semibold text-lg text-[#004651] px-4">
           <LayoutGrid className="h-6 w-6" />
             <span className="text-base font-normal whitespace-nowrap">Sistem Pengurusan Aset</span>
         </Link>
@@ -326,6 +326,9 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
             ))}
           </TabsList>
         </Tabs>
+      </div>
+      <div className="p-4">
+        {children}
       </div>
     </>
   )

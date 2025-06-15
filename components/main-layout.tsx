@@ -16,12 +16,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const publicPaths = ["/", "/login", "/register", "/forgot-password"]
   const isPublicPath = publicPaths.includes(pathname)
 
-  // If it's a public path, just return children with auth check
+  // If it's a public path, just return children (no AuthCheck)
   if (isPublicPath) {
-    return <AuthCheck>{children}</AuthCheck>
+    return <>{children}</>
   }
 
-  // For protected paths, wrap with dashboard layout
+  // For protected paths, wrap with dashboard layout and AuthCheck
   return (
     <AuthCheck>
       <ConsoleNavigation>{children}</ConsoleNavigation>

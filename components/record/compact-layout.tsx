@@ -47,15 +47,14 @@ export function CompactLayout({
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={onEdit} variant="outline" size="sm">
-            <Edit className="mr-2 h-4 w-4" />
+            {/* <Edit className="mr-2 h-4 w-4" /> */}
             Edit
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
-                <MoreHorizontal className="mr-2 h-4 w-4" />
-                Actions
-                <ChevronDown className="ml-2 h-4 w-4" />
+                {/* <MoreHorizontal className="mr-2 h-4 w-4" /> */}
+                <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

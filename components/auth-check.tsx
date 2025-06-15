@@ -1,12 +1,19 @@
 "use client"
 
 import type React from "react"
-
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 interface AuthCheckProps {
   children: React.ReactNode
+}
+
+function getCookie(name: string) {
+  if (typeof document === "undefined") return null
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop()?.split(";").shift() || null
+  return null
 }
 
 export default function AuthCheck({ children }: AuthCheckProps) {
@@ -16,7 +23,7 @@ export default function AuthCheck({ children }: AuthCheckProps) {
 
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem("auth-token")
+      const token = getCookie("auth-token")
       const isAuth = token === "demo-token"
 
       setIsAuthenticated(isAuth)
