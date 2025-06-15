@@ -35,6 +35,7 @@ export const config = {
     "/register",
     "/forgot-password",
     "/dashboard/:path*",
+    "/home/:path*",
     "/asset/:path*",
     "/account/:path*",
     "/maintenance/:path*",

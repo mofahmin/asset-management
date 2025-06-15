@@ -62,7 +62,7 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
   const isActive = (path: string) => pathname === path
 
   const navItems = [
-    { name: "Home", path: "/", icon: <Home className="h-4 w-4" /> },
+    { name: "Home", path: "/home", icon: <Home className="h-4 w-4" /> },
     { name: "Organisasi", path: "/account", icon: <Building2 className="h-4 w-4" /> },
     { name: "Aset", path: "/asset", icon: <Building2 className="h-4 w-4" /> },
     { name: "Penggunaan", path: "/contacts", icon: <Users className="h-4 w-4" /> },
@@ -73,7 +73,7 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
   ]
 
   const openTabItems = [
-    { id: "home", name: "Home", path: "/" },
+    { id: "home", name: "Home", path: "/home" },
     { id: "account", name: "Organisasi", path: "/account" },
     { id: "asset", name: "Aset", path: "/asset" },
     { id: "contacts", name: "Penggunaan", path: "/contacts" },

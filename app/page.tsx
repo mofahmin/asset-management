@@ -8,15 +8,15 @@ export default function Home() {
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="container flex h-16 items-center justify-between py-4">
           <div className="flex items-center gap-2">
-            <MosqueIcon className="h-6 w-6" />
-            <span className="text-xl font-bold">Sistem Pengurusan Aset</span>
+            {/* <MosqueIcon className="h-6 w-6" />
+            <span className="text-xl font-bold">Sistem Pengurusan Aset</span> */}
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/login">
               <Button variant="ghost">Log Masuk</Button>
             </Link>
             <Link href="/register">
-              <Button>Daftar</Button>
+              <Button variant="link">Daftar</Button>
             </Link>
           </nav>
         </div>
