@@ -18,7 +18,7 @@ import {
   Users,
   Wifi,
   WifiOff,
-  LayoutGrid,
+  Grip,
   UserIcon,
   SettingsIcon,
   LogOutIcon,
@@ -83,7 +83,7 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
     {
       name: "Dashboard",
       path: "/dashboard",
-      icon: <LayoutGrid className="h-4 w-4" />,
+      icon: <Grip className="h-4 w-4" />,
     },
   ];
 
@@ -378,7 +378,7 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
           href="/home"
           className="flex items-center gap-2 font-semibold text-lg text-[#004651] px-4"
         >
-          <LayoutGrid className="h-6 w-6" />
+          <Grip className="ml-2 h-6 w-6" />
           <span className="text-base font-normal whitespace-nowrap">
             Sistem Pengurusan Aset
           </span>
