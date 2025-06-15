@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ChurchIcon as MosqueIcon } from "lucide-react"
+import { Moon as MosqueIcon } from "lucide-react"
 
 export default function Home() {
   return (
