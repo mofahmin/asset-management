@@ -1,19 +1,35 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Building, ChevronDown, Download, Filter, Plus, RefreshCw, Settings } from "lucide-react"
-import { useMobile } from "@/hooks/use-mobile"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Building,
+  ChevronDown,
+  Download,
+  Filter,
+  Plus,
+  RefreshCw,
+  Settings,
+  PieChart,
+} from "lucide-react";
+import { useMobile } from "@/hooks/use-mobile";
 
 interface ListViewHeaderProps {
-  title: string
-  description: string
-  entityName: string
-  onNew: () => void
-  searchValue?: string
-  onSearchChange?: (value: string) => void
-  searchPlaceholder?: string
+  title: string;
+  description: string;
+  entityName: string;
+  onNew: () => void;
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string;
+  showChart?: boolean;
+  onToggleChart?: () => void;
 }
 
 export function ListViewHeader({
@@ -24,8 +40,10 @@ export function ListViewHeader({
   searchValue = "",
   onSearchChange,
   searchPlaceholder = "Search...",
+  showChart = true,
+  onToggleChart,
 }: ListViewHeaderProps) {
-  const isMobile = useMobile()
+  const isMobile = useMobile();
 
   return (
     <div className="flex flex-col gap-4 pb-4 border-b">
@@ -33,7 +51,9 @@ export function ListViewHeader({
         <div className="flex items-center gap-3">
           <Building className="h-8 w-8 text-gray-700" />
           <div className="flex flex-col">
-            <span className="text-2xl font-semibold text-gray-900">{title}</span>
+            <span className="text-2xl font-semibold text-gray-900">
+              {title}
+            </span>
             <span className="text-sm text-gray-500">{description}</span>
           </div>
         </div>
@@ -46,15 +66,26 @@ export function ListViewHeader({
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         <div className="flex items-center gap-2">
           <p className="text-sm"></p>
-          <span className="text-xs text-gray-500">3 items • Updated 8 minutes ago</span>
+          <span className="text-xs text-gray-500">
+            3 items • Updated 8 minutes ago
+          </span>
         </div>
         {!isMobile && (
           <div className="flex items-center gap-2">
-            <Input 
-              placeholder={searchPlaceholder} 
+            <Input
+              placeholder={searchPlaceholder}
               value={searchValue}
               onChange={(e) => onSearchChange?.(e.target.value)}
-              className="w-full sm:w-[300px]" />
+              className="w-full sm:w-[300px]"
+            />
+            <Button
+              variant={showChart ? "default" : "outline"}
+              size="icon"
+              onClick={onToggleChart}
+              title={showChart ? "Hide Charts" : "Show Charts"}
+            >
+              <PieChart className="h-4 w-4" />
+            </Button>
             <Button variant="outline" size="icon">
               <Filter className="h-4 w-4" />
             </Button>
@@ -69,9 +100,7 @@ export function ListViewHeader({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={onNew}
-                >
+                <DropdownMenuItem onClick={onNew}>
                   <Plus className="mr-2 h-4 w-4" />
                   New {entityName}
                 </DropdownMenuItem>
@@ -89,6 +118,5 @@ export function ListViewHeader({
         )}
       </div>
     </div>
-  )
+  );
 }
-
