@@ -83,7 +83,7 @@ export default function AssetPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [searchValue, setSearchValue] = useState("");
-  const [showChart, setShowChart] = useState(true);
+  const [showChart, setShowChart] = useState(false);
   const [assets, setAssets] = useState([
     {
       // Classification
