@@ -26,7 +26,12 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -140,17 +145,18 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
             >
               <nav className="grid gap-2 py-4">
                 {navItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    href={item.path}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-2 text-sm rounded-md",
-                      isActive(item.path) ? "text-black" : "hover:text-black"
-                    )}
-                  >
-                    {item.icon}
-                    {item.name}
-                  </Link>
+                  <SheetClose asChild key={item.path}>
+                    <Link
+                      href={item.path}
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-2 text-sm rounded-md",
+                        isActive(item.path) ? "text-black" : "hover:text-black"
+                      )}
+                    >
+                      {item.icon}
+                      {item.name}
+                    </Link>
+                  </SheetClose>
                 ))}
               </nav>
             </SheetContent>
