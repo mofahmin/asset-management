@@ -208,6 +208,7 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
             </DropdownMenu>
           </div>
         </div>
+        <div className="p-4">{children}</div>
       </>
     );
   }
