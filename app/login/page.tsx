@@ -14,47 +14,49 @@ import { useToast } from "@/components/ui/use-toast"
 import { useAuth } from "@/hooks/use-auth"
 
 export default function LoginPage() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
   const { login } = useAuth()
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setIsLoading(true)
-
-    const formData = new FormData(event.currentTarget)
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
-
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+    setLoading(true)
     try {
-      if (email && password) {
-        await login(email, password)
-
+      const res = await fetch("http://localhost:8000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
+      if (res.ok && data.token) {
+        localStorage.setItem("token", data.token)
         toast({
           title: "Log masuk berjaya",
           description: "Anda telah berjaya log masuk ke sistem.",
         })
-
-        // Set cookie for middleware
-        document.cookie = "auth-token=demo-token; path=/"
-
         router.push("/home")
       } else {
+        setError(data.message || "Login failed")
         toast({
           title: "Error",
-          description: "Sila masukkan email dan kata laluan",
+          description: data.message || "Ralat semasa log masuk",
           variant: "destructive",
         })
       }
-    } catch (error) {
+    } catch (err) {
+      setError("Network error")
       toast({
         title: "Error",
-        description: "Ralat semasa log masuk",
+        description: "Ralat rangkaian atau pelayan tidak tersedia.",
         variant: "destructive",
       })
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }
 
@@ -66,14 +68,24 @@ export default function LoginPage() {
             <MosqueIcon className="h-10 w-10 text-blue-500" />
           </div>
           <CardTitle className="text-2xl text-center">Log Masuk</CardTitle>
-          <CardDescription className="text-center">Masukkan maklumat log masuk anda untuk akses sistem.
-          Letak je email and password pape skang!</CardDescription>
+          <CardDescription className="text-center">
+            Masukkan maklumat log masuk anda untuk akses sistem.
+            Letak je email and password pape skang!
+          </CardDescription>
         </CardHeader>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="nama@contoh.com" required />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="nama@contoh.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+              />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -82,18 +94,31 @@ export default function LoginPage() {
                   Lupa Kata Laluan?
                 </Link>
               </div>
-              <Input id="password" name="password" type="password" required />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+              />
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Memasuki Sistem..." : "Log Masuk"}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Memasuki Sistem..." : "Log Masuk"}
             </Button>
+            {error && <div className="text-red-600 text-center mt-2">{error}</div>}
             <div className="mt-4 text-center text-sm">
               Belum mempunyai akaun?{" "}
               <Link href="/register" className="text-blue-500 hover:underline">
                 Daftar di sini
               </Link>
+            </div>
+            <div className="text-xs text-gray-500 text-center mt-2">
+              <div>Demo users:</div>
+              <div>admin@masjidalfalah.com / password</div>
+              <div>pegawai@surauannur.com / password</div>
             </div>
           </CardFooter>
         </form>

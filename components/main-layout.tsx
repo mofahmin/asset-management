@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { usePathname } from "next/navigation"
-import AuthCheck from "@/components/auth-check"
+import ClientLayout from "../app/client-layout"
 import { ConsoleNavigation } from "@/components/layout/console-navigation"
 
 interface MainLayoutProps {
@@ -16,15 +16,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const publicPaths = ["/", "/login", "/register", "/forgot-password"]
   const isPublicPath = publicPaths.includes(pathname)
 
-  // If it's a public path, just return children with auth check
+  // If it's a public path, just return children without ClientLayout
   if (isPublicPath) {
-    return <AuthCheck>{children}</AuthCheck>
+    return <>{children}</>; // No ClientLayout for public paths
   }
 
-  // For protected paths, wrap with dashboard layout
+  // For protected paths, wrap with ClientLayout and ConsoleNavigation
   return (
-    <AuthCheck>
+    <ClientLayout>
       <ConsoleNavigation>{children}</ConsoleNavigation>
-    </AuthCheck>
+    </ClientLayout>
   )
 }
