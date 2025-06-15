@@ -39,7 +39,7 @@ export default function LoginPage() {
         // Set cookie for middleware
         document.cookie = "auth-token=demo-token; path=/"
 
-        router.push("/dashboard")
+        router.push("/home")
       } else {
         toast({
           title: "Error",

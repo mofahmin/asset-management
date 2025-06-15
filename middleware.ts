@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
   // Redirect logic
   if (isPublicPath && hasAuthToken) {
     // If user is logged in and trying to access a public path, redirect to dashboard
-    return NextResponse.redirect(new URL("/dashboard", request.url))
+    return NextResponse.redirect(new URL("/", request.url))
   }
 
   if (!isPublicPath && !hasAuthToken) {
@@ -35,8 +35,8 @@ export const config = {
     "/register",
     "/forgot-password",
     "/dashboard/:path*",
-    "/assets/:path*",
-    "/forms/:path*",
+    "/asset/:path*",
+    "/account/:path*",
     "/maintenance/:path*",
     "/disposals/:path*",
     "/losses/:path*",

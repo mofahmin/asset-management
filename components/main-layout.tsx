@@ -2,8 +2,8 @@
 
 import type React from "react"
 import { usePathname } from "next/navigation"
-import DashboardLayout from "@/components/dashboard-layout"
 import AuthCheck from "@/components/auth-check"
+import { ConsoleNavigation } from "@/components/layout/console-navigation"
 
 interface MainLayoutProps {
   children: React.ReactNode
@@ -24,7 +24,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   // For protected paths, wrap with dashboard layout
   return (
     <AuthCheck>
-      <DashboardLayout>{children}</DashboardLayout>
+      <ConsoleNavigation>{children}</ConsoleNavigation>
     </AuthCheck>
   )
 }
