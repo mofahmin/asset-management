@@ -117,6 +117,9 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
 
   //Hide on mobile since we're using bottom navigation
   if (isMobile) {
+    // Find the active nav item based on the current pathname
+    const activeNavItem = navItems.find((item) => isActive(item.path));
+
     return (
       <>
         <div className="flex h-16 items-center border-b px-4 lg:px-6 text-black">
@@ -152,6 +155,12 @@ export function ConsoleNavigation({ children }: ConsoleNavigationLayoutProps) {
               </nav>
             </SheetContent>
           </Sheet>
+          {/* Center nav item name */}
+          <div className="flex-1 flex justify-center">
+            <span className="font-semibold text-base text-[#004651] whitespace-nowrap">
+              {activeNavItem?.name || ""}
+            </span>
+          </div>
           <div className="ml-auto flex items-center gap-2">
             <Button variant="ghost" size="icon" className="text-black relative">
               <Bell className="h-5 w-8" />
